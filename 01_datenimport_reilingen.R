@@ -1,17 +1,26 @@
 # 01_datenimport_reilingen.R
 # Projekt: Bevölkerungsvorausberechnung und Kita-Bedarf Reilingen
 
-# Lade das wichtigste Paket für Datenbearbeitung in R
-# Falls es noch nicht installiert ist, vorher in die Konsole tippen: install.packages("tidyverse")
 library(tidyverse)
 
-# Hier importieren wir später die echten Daten vom Statistischen Landesamt.
-# Fürs Erste legen wir einen kleinen Platzhalter an:
-reilingen_basisdaten <- tibble(
-  jahr = 2026,
-  einwohner_gesamt = 8300, # Ungefähre Einwohnerzahl Reilingen
-  kinder_u3 = 250,         # Beispielwert
-  kinder_ue3_bis_6 = 300   # Beispielwert
+# 1. Datenimport aus dem Ordner "data"
+# Lösung 1: encoding = "latin1" (wegen der Umlaute im Behörden-Format)
+# Lösung 2: skip = 8 (überspringt Titel UND die dreizeiligen Spaltenköpfe)
+# Lösung 3: col_names (wir vergeben unsere eigenen, sauberen Namen)
+reilingen_roh <- read_csv2(
+  "data/reilingen_demo_20_y_brackets.csv",
+  locale = locale(encoding = "latin1"),
+  skip = 8,
+  col_names = c(
+    "stichtag", 
+    "regionalschluessel", 
+    "gemeinde", 
+    "altersgruppe", 
+    "insgesamt", 
+    "maennlich", 
+    "weiblich"
+  )
 )
 
-print("Skript erfolgreich angelegt und Basisdaten-Struktur für Reilingen geladen!")
+# Wir schauen uns das Ergebnis an
+print(head(reilingen_roh))
